@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Посадочные под опт/дропшипинг</name>
+    <code>ksurill-opt-landings</code>
+    <version>1.0</version>
+    <author>Balashov Kirill</author>
+    <link>https://mt-box.ru</link>
+
+	<file path="admin/controller/common/menu.php">
+
+       	<operation>
+            <search>
+                <![CDATA[$data['information'] = $this->url->link('catalog/information', 'token=' . $this->session->data['token'], 'SSL');]]>
+            </search>
+            <add position="before">
+                <![CDATA[$data['optpage'] = $this->url->link('catalog/opt', 'token=' . $this->session->data['token'], 'SSL');]]>
+            </add>
+        </operation>
+
+       	<operation>
+            <search>
+                <![CDATA[$data['text_information'] = $this->language->get('text_information');]]>
+            </search>
+            <add position="before">
+                <![CDATA[$data['text_optpage'] = 'Посадочные ОПТ';]]>
+            </add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/common/menu.tpl">
+
+       	<operation>
+            <search>
+                <![CDATA[<li><a href="<?php echo $information; ?>"><?php echo $text_information; ?></a></li>]]>
+            </search>
+            <add position="before">
+                <![CDATA[<li><a href="<?php echo $optpage; ?>"><?php echo $text_optpage; ?></a></li>]]>
+            </add>
+        </operation>
+    </file>
+    <file path="catalog/controller/common/seo_pro.php">
+
+       	<operation>
+            <search>
+                <![CDATA[case 'product/product/review':]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+				case 'module/optpage':
+					if(isset($data['opt_id'])) {
+						$data['opt_id'] = $data['opt_id'];
+					}
+					break;
+				]]>
+            </add>
+        </operation>
+
+    	<operation>
+            <search>
+                <![CDATA[case 'path':]]>
+            </search>
+            <add position="before">
+                <![CDATA[
+				case 'opt_id':
+					$queries[] = $route;
+					$queries[] = $key . '=' . $value;
+
+					unset($data[$key]);
+					// $postfix = 1;
+					break;
+				]]>
+            </add>
+        </operation>
+
+    </file>
+</modification>
